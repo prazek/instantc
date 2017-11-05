@@ -28,6 +28,8 @@ private:
     }
 
     char current = ifs_.peek();
+    if (current == EOF)
+      return getEOF();
     if (std::isalpha(current))
       return getID(current);
 
@@ -36,12 +38,15 @@ private:
 
     switch (current) {
     case ';':
-      return Token{TokenType::SEMI, std::string{1, char(ifs_.get())}};
+      return Token{TokenType::SEMI, std::string(1, char(ifs_.get()))};
+    case '\n':
+      return Token{TokenType::NEW_LINE, std::string(1, char(ifs_.get()))};
+    case '=':
+      return Token{TokenType::ASSIGN, std::string(1, char(ifs_.get()))};
     case '+':
     case '*':
     case '-':
     case '/':
-    case '=':
       return getOperator();
     default:
       assert(false);
@@ -49,9 +54,8 @@ private:
 
   }
   Token getOperator() const {
-    if (lastToken_.type == TokenType::OPERATOR)
-      getInvalid();
-    return Token{TokenType::OPERATOR, std::string{1, char(ifs_.get())}};
+    char op = ifs_.get();
+    return Token{TokenType::OPERATOR, std::string(1, op)};
   }
 
   Token getNumber(char current) const {
@@ -62,7 +66,7 @@ private:
         current = ifs_.peek();
       }
     if (isalpha(current))
-        return getInvalid();
+        return getInvalid(num);
 
     return Token{TokenType::NUM, move(num)};
   }
@@ -79,8 +83,11 @@ private:
     return Token{TokenType::ID, move(id)};
   }
 
-  Token getInvalid() const {
-    return Token{TokenType::INVALID, {}};
+  Token getInvalid(std::string s = "") const {
+    return Token{TokenType::INVALID, std::move(s)};
+  }
+  Token getEOF() const {
+    return Token{TokenType::END_FILE, {}};
   }
 private:
   std::istream &ifs_;

@@ -7,27 +7,32 @@
 
 class LexStream : std::iterator<std::forward_iterator_tag, const Token>{
   using Base = std::iterator<std::forward_iterator_tag, const Token>;
-  LexStream(Lexer &lexer) : lexer(lexer) {}
+
 public:
-
-
-
-
+  LexStream(Lexer &lexer) : lexer(lexer), current(lexer.currentToken()) {}
+  Base::pointer operator->() const {
+    return &current;
+  }
   Base::reference operator*() const {
-    return lexer.currentToken();
+    return current;
   }
   // ++it
-  Base::reference operator++(int) {
-    return lexer.nextToken();
+  LexStream operator++(int) {
+    current = lexer.nextToken();
+    return *this;
   }
   // it++
-  Base::value_type operator++() {
-    Token token = this->operator*();
+  LexStream operator++() {
+    auto tmp = *this;
     this->operator++(42);
-    return token;
+    return tmp;
   }
-
+  /*
+  bool operator==(const LexStream& rhs) { return ptr_ == rhs.ptr_; }
+  bool operator!=(const LexStream& rhs) { return ptr_ != rhs.ptr_; }
+*/
 private:
   Lexer &lexer;
+  Token current;
 };
 
