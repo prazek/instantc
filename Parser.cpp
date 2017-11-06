@@ -14,16 +14,18 @@ AST Parser::runParser() {
       continue;
     case TokenType::ID:
       ast.stmts.push_back(parseStmt());
-
+      break;
     case TokenType::OPERATOR:
       issueError("operator " + tok.string + " at begging of stmt");
+      continue;
     case TokenType::NUM:
       ast.stmts.push_back(parseBasicStmt());
-
+      continue;
 
     case TokenType::ASSIGN:
     case TokenType::INVALID:
       issueError("Wrong token at beggining");
+      continue;
     case TokenType::SPACE:
       assert(false);
     }
@@ -36,7 +38,12 @@ AST Parser::runParser() {
 }
 
 void Parser::issueError(const std::string& msg) {
-  printf("error: %s", msg.c_str());
+  fprintf(stderr, "error: %s\n", msg.c_str());
+}
+static bool isEndStmt(TokenType type) {
+  return type == TokenType::SEMI ||
+      type == TokenType::NEW_LINE ||
+      type == TokenType::END_FILE;
 }
 
 // id = expr
@@ -50,20 +57,24 @@ Stmt Parser::parseStmt() {
                                                    std::move(rhs));
     return Stmt{std::move(assignExpr), parseSemi()};
   }
-  else {
+
+  if (lexStream->type == TokenType::OPERATOR)
     assert(false);
-  }
 
+  if (isEndStmt(lexStream->type))
+    return Stmt{std::move(varExpr), parseSemi()};
 
+  assert(false);
   return Stmt();
 }
 
 bool Parser::parseSemi() {
-  bool isSemi = lexStream->type == TokenType::SEMI;
-  if (!isSemi && lexStream->type != TokenType::NEW_LINE) {
+  if (!isEndStmt(lexStream->type))
       issueError("Semicolon or new line expected");
-    }
-  lexStream++;
+
+  bool isSemi = lexStream->type == TokenType::SEMI;
+  if (lexStream->type != TokenType::END_FILE)
+    lexStream++;
   return isSemi;
 }
 
@@ -78,15 +89,16 @@ std::unique_ptr<Expr> Parser::parseExpr() {
   if (!first)
     return nullptr;
   // TODO handle binary ops
-  return nullptr;
+  return first;
 }
 
 std::unique_ptr<Expr> Parser::parseBasicExpr() {
   if (lexStream->type == TokenType::ID)
-    return std::make_unique<VarExpr>(lexStream++->string);
-  if (lexStream->type == TokenType::NUM)
-    return std::make_unique<ConstantExpr>(
-        std::atoll(lexStream++->string.c_str()));
+    return std::make_unique<VarExpr>((lexStream++)->string);
+  if (lexStream->type == TokenType::NUM) {
+    ConstantExpr::data_type val = std::stoi((lexStream++)->string);
+    return std::make_unique<ConstantExpr>(val);
+  }
   return nullptr;
 }
 

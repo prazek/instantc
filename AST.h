@@ -14,22 +14,34 @@ enum class BinaryOperator {
 struct Expr {
   //Expr(const Expr&) = delete;
  //Expr(Expr&&) = delete;
+  virtual std::ostream& print(std::ostream&) const = 0;
+  void print() const;
+
+  friend std::ostream &operator<<(std::ostream &os, const Expr& expr) {
+    return expr.print(os);
+  }
   virtual ~Expr() = 0;
 };
 
 struct VarExpr final : Expr  {
   VarExpr(std::string name) : name(std::move(name)) {}
 
+  std::ostream& print(std::ostream& os) const override {
+    return os << "VarExpr: " << name << '\n';
+  }
+
   const std::string name;
-  ~VarExpr() override = default;
 };
 
 struct ConstantExpr final : Expr {
   using data_type = long long;
-  ConstantExpr(data_type var) : var(var) {}
-  ~ConstantExpr() override = default;
+  ConstantExpr(data_type value) : value(value) {}
 
-  data_type var;
+  std::ostream& print(std::ostream& os) const override {
+    return os << "ConstantExpr: " << value << '\n';
+  }
+
+  data_type value;
 };
 
 struct BinaryExpr final : Expr {
@@ -44,7 +56,10 @@ struct BinaryExpr final : Expr {
 struct AssignExpr final : Expr{
   AssignExpr(VarExpr varExpr, std::unique_ptr<Expr> rhs)
       : variable(std::move(varExpr)), rhs(std::move(rhs)) {}
-  ~AssignExpr() override = default;
+
+  std::ostream& print(std::ostream& os) const override {
+    return os << "AssignExpr: " << variable << '\n';
+  }
 
   VarExpr variable;
   std::unique_ptr<Expr> rhs;

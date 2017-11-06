@@ -17,14 +17,14 @@ public:
     return current;
   }
   // ++it
-  LexStream operator++(int) {
+  LexStream operator++() {
     current = lexer.nextToken();
     return *this;
   }
   // it++
-  LexStream operator++() {
+  LexStream operator++(int) {
     auto tmp = *this;
-    this->operator++(42);
+    this->operator++();
     return tmp;
   }
   /*

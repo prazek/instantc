@@ -5,7 +5,6 @@
 #include "Parser.h"
 #include <sstream>
 
-namespace {
 
 TEST(ParserTest, Empty) {
   std::string empty = "";
@@ -34,7 +33,6 @@ TEST(ParserTest, Id) {
   EXPECT_TRUE(var != nullptr);
 
   EXPECT_EQ(var->name, expr);
-  EXPECT_FALSE(true);
 }
 
 TEST(ParserTest, Num) {
@@ -47,9 +45,13 @@ TEST(ParserTest, Num) {
   auto ast = parser.runParser();
 
   ASSERT_EQ(ast.stmts.size(), 1ul);
+  auto &stmt = ast.stmts[0];
+  ASSERT_NE(stmt.expr, nullptr);
+  auto* var = dynamic_cast<ConstantExpr*>(stmt.expr.get());
+  EXPECT_TRUE(var != nullptr);
 
+  EXPECT_EQ(var->value, 42);
 }
 
 
-}
 

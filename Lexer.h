@@ -15,7 +15,7 @@ public:
 
   const Token &nextToken() {
     if (lastToken_.type == TokenType::END_FILE)
-      throw 42;
+      assert(false && "Can't go through the end");
     lastToken_ = getNextToken();
     return lastToken_;
   }

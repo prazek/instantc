@@ -3,8 +3,6 @@
 #include "Lexer.h"
 #include <sstream>
 
-namespace {
-
 TEST(LexerTest, Empty) {
   const std::string empty = "";
 
@@ -102,4 +100,3 @@ TEST(LexerTest, Simple2) {
   EXPECT_EQ(lexer.nextToken(), (Token{TokenType::NUM, "3"}));
 }
 
-}
