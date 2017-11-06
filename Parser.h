@@ -17,11 +17,10 @@ private:
   std::unique_ptr<Expr> parseBasicExpr();
 
   void issueError(const std::string &msg);
-
+  void parseSemi();
 private:
   AST ast;
   LexStream &lexStream;
-  bool parseSemi();
 };
 
 

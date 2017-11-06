@@ -13,7 +13,7 @@ AST Parser::runParser() {
     case TokenType::NEW_LINE:
       continue;
     case TokenType::ID:
-      ast.stmts.push_back(parseStmt());
+      ast.exprs.push_back(parseStmt());
       break;
     case TokenType::OPERATOR:
       issueError("operator " + tok.string + " at begging of stmt");
@@ -29,7 +29,7 @@ AST Parser::runParser() {
     case TokenType::SPACE:
       assert(false);
     }
-
+    parseSemi();
 
   }
   out:
@@ -55,27 +55,24 @@ Stmt Parser::parseStmt() {
     auto rhs = parseExpr();
     auto assignExpr = std::make_unique<AssignExpr>(std::move(*varExpr),
                                                    std::move(rhs));
-    return Stmt{std::move(assignExpr), parseSemi()};
+    return assignExpr;
   }
 
   if (lexStream->type == TokenType::OPERATOR)
     assert(false);
 
   if (isEndStmt(lexStream->type))
-    return Stmt{std::move(varExpr), parseSemi()};
+    return varExpr;
 
   assert(false);
   return Stmt();
 }
 
-bool Parser::parseSemi() {
+void Parser::parseSemi() {
   if (!isEndStmt(lexStream->type))
       issueError("Semicolon or new line expected");
 
-  bool isSemi = lexStream->type == TokenType::SEMI;
-  if (lexStream->type != TokenType::END_FILE)
-    lexStream++;
-  return isSemi;
+  ++lexStream;
 }
 
 Stmt Parser::parseBasicStmt() {
@@ -88,6 +85,10 @@ std::unique_ptr<Expr> Parser::parseExpr() {
   auto first = parseBasicExpr();
   if (!first)
     return nullptr;
+
+
+  static const std::unordered_map<char,
+
   // TODO handle binary ops
   return first;
 }
