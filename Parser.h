@@ -11,12 +11,15 @@ public:
   AST runParser();
 private:
 
-  Stmt parseStmt();
-  Stmt parseBasicStmt();
+  std::unique_ptr<Expr> parseStmt();
+  std::unique_ptr<Expr> parseBasicStmt();
   std::unique_ptr<Expr> parseExpr();
   std::unique_ptr<Expr> parseBasicExpr();
+  std::unique_ptr<Expr> parseBinOpRhs(std::unique_ptr<Expr> lhs,
+                                      int precedence);
 
-  void issueError(const std::string &msg);
+
+  std::nullptr_t issueError(const std::string &msg);
   void parseSemi();
 private:
   AST ast;

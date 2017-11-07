@@ -20,7 +20,7 @@ add_subdirectory(Tests)
 
 
 
-set(INSTC_LLVM_SOURCE_FILES  Lexer.cpp  LexStream.cpp Lexer.h LexStream.h Token.h AST.h Parser.cpp Parser.h AST.cpp)
+set(INSTC_LLVM_SOURCE_FILES  Lexer.cpp  LexStream.cpp Lexer.h LexStream.h Token.h AST.h Parser.cpp Parser.h AST.cpp LLVMCodeGen.cpp LLVMCodeGen.h)
 set(SOURCE_FILES ${SOURCE_FILES} ${INSTC_LLVM_SOURCE_FILES})
 
 

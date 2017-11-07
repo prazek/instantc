@@ -2,21 +2,24 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <sstream>
 
 enum class BinaryOperator {
   plus,
   minus,
-  assign,
   mul,
   div
 };
 
+BinaryOperator getOperator(char op);
+
 template <typename T>
-std::ostream &printOpt(std::ostream &os, const T &ptr) {
-  if (ptr)
-    return os << *ptr;
+std::ostream &operator<<(std::ostream &os, const std::unique_ptr<T> &p) {
+  if (p)
+    return os << *p;
   return os << "null";
 }
+
 
 struct Expr {
   //Expr(const Expr&) = delete;
@@ -37,7 +40,7 @@ struct VarExpr final : Expr  {
   VarExpr(std::string name) : name(std::move(name)) {}
 
   std::ostream& print(std::ostream& os) const override {
-    return os << std::string(indentLevel, " ") << "VarExpr: " << name << '\n';
+    return os << std::string(indentLevel, ' ') << "VarExpr: " << name << '\n';
   }
 
   const std::string name;
@@ -49,50 +52,56 @@ struct ConstantExpr final : Expr {
 
   std::ostream& print(std::ostream& os) const override {
 
-    return os << std::string(indentLevel, " ") << "ConstantExpr: " << value << '\n';
+    return os << std::string(indentLevel, ' ') << "ConstantExpr: " << value << '\n';
   }
 
   data_type value;
 };
 
 struct BinaryExpr final : Expr {
+  std::unique_ptr<Expr> lhs, rhs;
+  BinaryOperator op;
+
   BinaryExpr(std::unique_ptr<Expr> lhs, BinaryOperator op,
              std::unique_ptr<Expr> rhs) :
       lhs(std::move(lhs)), rhs(std::move(rhs)), op(op) {}
 
   std::ostream& print(std::ostream& os) const override {
-    os << std::string(indentLevel, " ") << "BinaryExpr: \n";
+    os << std::string(indentLevel, ' ') << "BinaryExpr: \n";
     indentLevel += 2;
-    os << std::string(indentLevel, " ") << printOpt(os, lhs) << "\n"
-       << std::string(indentLevel, " ") << printOpt(os, rhs) << "\n";
+    os << std::string(indentLevel, ' ') << lhs << "\n"
+       << std::string(indentLevel, ' ') << rhs << "\n";
     indentLevel -= 2;
     return os;
   }
-
-
-  std::unique_ptr<Expr> lhs, rhs;
-  BinaryOperator op;
 };
 
 struct AssignExpr final : Expr{
+  VarExpr variable;
+  std::unique_ptr<Expr> rhs;
+
   AssignExpr(VarExpr varExpr, std::unique_ptr<Expr> rhs)
       : variable(std::move(varExpr)), rhs(std::move(rhs)) {}
 
   std::ostream& print(std::ostream& os) const override {
-    os << std::string(indentLevel, " ") << "AssignExpr: \n";
+    os << std::string(indentLevel, ' ') << "AssignExpr: \n";
     indentLevel += 2;
-    os << std::string(indentLevel, " ") << variable << "\n"
-       << std::string(indentLevel, " ") << printOpt(os, rhs) << "\n";
+    os << std::string(indentLevel, ' ') << variable << "\n"
+       << std::string(indentLevel, ' ') << rhs << "\n";
     indentLevel -= 2;
     return os;
   }
-
-  VarExpr variable;
-  std::unique_ptr<Expr> rhs;
 };
 
 
 
 struct AST {
   std::vector<std::unique_ptr<Expr> > exprs;
+
+  friend std::ostream &operator<<(std::ostream& os, const AST &ast) {
+    for (const auto &expr : ast.exprs)
+      os << expr;
+    return os;
+  }
+
 };

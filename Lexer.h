@@ -22,7 +22,7 @@ public:
 
 private:
   Token getNextToken() {
-    while (ifs_.peek() == ' ') {
+    while (std::isspace(ifs_.peek())) {
       ifs_.get();
       lastToken_.type = TokenType::SPACE;
     }
@@ -39,8 +39,6 @@ private:
     switch (current) {
     case ';':
       return Token{TokenType::SEMI, std::string(1, char(ifs_.get()))};
-    case '\n':
-      return Token{TokenType::NEW_LINE, std::string(1, char(ifs_.get()))};
     case '=':
       return Token{TokenType::ASSIGN, std::string(1, char(ifs_.get()))};
     case '+':

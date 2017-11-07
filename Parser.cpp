@@ -1,5 +1,5 @@
 #include "Parser.h"
-
+#include <unordered_map>
 
 AST Parser::runParser() {
   const Token &tok = *lexStream;
@@ -10,16 +10,15 @@ AST Parser::runParser() {
     case TokenType::END_FILE:
       goto out;
     case TokenType::SEMI:
-    case TokenType::NEW_LINE:
       continue;
     case TokenType::ID:
-      ast.exprs.push_back(parseStmt());
+      ast.exprs.emplace_back(parseStmt());
       break;
     case TokenType::OPERATOR:
       issueError("operator " + tok.string + " at begging of stmt");
       continue;
     case TokenType::NUM:
-      ast.stmts.push_back(parseBasicStmt());
+      ast.exprs.emplace_back(parseBasicStmt());
       continue;
 
     case TokenType::ASSIGN:
@@ -37,47 +36,45 @@ AST Parser::runParser() {
   return std::move(ast);
 }
 
-void Parser::issueError(const std::string& msg) {
+std::nullptr_t Parser::issueError(const std::string& msg) {
   fprintf(stderr, "error: %s\n", msg.c_str());
+  return nullptr;
 }
 static bool isEndStmt(TokenType type) {
   return type == TokenType::SEMI ||
-      type == TokenType::NEW_LINE ||
       type == TokenType::END_FILE;
 }
 
 // id = expr
 // | expr
-Stmt Parser::parseStmt() {
+std::unique_ptr<Expr> Parser::parseStmt() {
   auto varExpr = std::make_unique<VarExpr>(lexStream->string);
   ++lexStream;
   if (lexStream->type == TokenType::ASSIGN) {
     auto rhs = parseExpr();
-    auto assignExpr = std::make_unique<AssignExpr>(std::move(*varExpr),
+   return std::make_unique<AssignExpr>(std::move(*varExpr),
                                                    std::move(rhs));
-    return assignExpr;
   }
 
   if (lexStream->type == TokenType::OPERATOR)
     assert(false);
 
   if (isEndStmt(lexStream->type))
-    return varExpr;
+    return std::move(varExpr);
 
   assert(false);
-  return Stmt();
+  return nullptr;
 }
 
 void Parser::parseSemi() {
   if (!isEndStmt(lexStream->type))
       issueError("Semicolon or new line expected");
-
-  ++lexStream;
+  if (lexStream->type != TokenType::END_FILE)
+    ++lexStream;
 }
 
-Stmt Parser::parseBasicStmt() {
-  auto expr = parseExpr();
-  return Stmt{std::move(expr), parseSemi()};
+std::unique_ptr<Expr> Parser::parseBasicStmt() {
+  return parseExpr();
 }
 
 
@@ -86,11 +83,7 @@ std::unique_ptr<Expr> Parser::parseExpr() {
   if (!first)
     return nullptr;
 
-
-  static const std::unordered_map<char,
-
-  // TODO handle binary ops
-  return first;
+  return parseBinOpRhs(std::move(first), 0);
 }
 
 std::unique_ptr<Expr> Parser::parseBasicExpr() {
@@ -101,5 +94,59 @@ std::unique_ptr<Expr> Parser::parseBasicExpr() {
     return std::make_unique<ConstantExpr>(val);
   }
   return nullptr;
+}
+
+
+std::unique_ptr<Expr> Parser::parseBinOpRhs(std::unique_ptr<Expr> lhs,
+                                            int startPrec) {
+
+
+
+  static const std::unordered_map<char, int8_t> operatorPrecedence = {
+    {'+', 10}, {'-', 10}, {'/', 20}, {'*', 30}
+  };
+
+  while (true) {
+    if (isEndStmt(lexStream->type))
+      return lhs;
+
+    if (lexStream->type != TokenType::OPERATOR)
+      return issueError("Expected operator after expression");
+
+    assert(lexStream->type == TokenType::OPERATOR);
+    assert(lexStream->string.size() == 1);
+    char operatorChar = lexStream->string[0];
+    auto prec = operatorPrecedence.at(operatorChar);
+    if (prec < startPrec)
+      return lhs;
+
+    ++lexStream;
+    auto rhs = parseBasicExpr();
+    if (!rhs)
+      return issueError("Expected expression after operator");
+
+
+    if (isEndStmt(lexStream->type))
+      return lhs;
+
+    if (lexStream->type != TokenType::OPERATOR)
+      return issueError("Expected operator after expression");
+
+    assert(lexStream->type == TokenType::OPERATOR);
+    assert(lexStream->string.size() == 1);
+    char operatorChar2 = lexStream->string[0];
+    auto prec2 = operatorPrecedence.at(operatorChar2);
+    if (prec < prec2) {
+      rhs = parseBinOpRhs(std::move(rhs), prec2);
+      if (!rhs)
+        return nullptr;
+    }
+    // Merge LHS/RHS.
+    lhs = std::make_unique<BinaryExpr>(std::move(lhs),
+                                       getOperator(operatorChar),
+                                       std::move(rhs));
+
+  }
+  assert(false);
 }
 

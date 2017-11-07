@@ -94,7 +94,6 @@ TEST(LexerTest, Simple2) {
   EXPECT_EQ(lexer.nextToken(), (Token{TokenType::OPERATOR, "+"}));
   EXPECT_EQ(lexer.nextToken(), (Token{TokenType::NUM, "2"}));
 
-  EXPECT_EQ(lexer.nextToken(), (Token{TokenType::NEW_LINE, "\n"}));
   EXPECT_EQ(lexer.nextToken(), (Token{TokenType::NUM, "2"}));
   EXPECT_EQ(lexer.nextToken(), (Token{TokenType::OPERATOR, "+"}));
   EXPECT_EQ(lexer.nextToken(), (Token{TokenType::NUM, "3"}));
