@@ -11,6 +11,8 @@ enum class BinaryOperator {
   div
 };
 
+std::ostream &operator<<(std::ostream &os, BinaryOperator op);
+
 BinaryOperator getOperator(char op);
 
 template <typename T>
@@ -67,10 +69,10 @@ struct BinaryExpr final : Expr {
       lhs(std::move(lhs)), rhs(std::move(rhs)), op(op) {}
 
   std::ostream& print(std::ostream& os) const override {
-    os << std::string(indentLevel, ' ') << "BinaryExpr: \n";
+    os << std::string(indentLevel, ' ') << "BinaryExpr: " << op << "\n";
     indentLevel += 2;
-    os << std::string(indentLevel, ' ') << lhs << "\n"
-       << std::string(indentLevel, ' ') << rhs << "\n";
+    os << std::string(indentLevel, ' ') << lhs
+       << std::string(indentLevel, ' ') << rhs;
     indentLevel -= 2;
     return os;
   }

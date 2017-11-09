@@ -6,6 +6,8 @@
 #include <string>
 
 class LLVMCodeGen {
+
+
 public:
   LLVMCodeGen(std::ostream &os) : os(os) {}
 
@@ -18,6 +20,7 @@ public:
   std::string emitVariableExpr(const VarExpr &expr);
 
 
+  static const std::string prelude;
 private:
   std::string getNewValue();
   std::unordered_map<std::string, std::string> variables;

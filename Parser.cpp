@@ -10,21 +10,21 @@ AST Parser::runParser() {
     case TokenType::END_FILE:
       goto out;
     case TokenType::SEMI:
-      continue;
+      break;
     case TokenType::ID:
       ast.exprs.emplace_back(parseStmt());
       break;
     case TokenType::OPERATOR:
       issueError("operator " + tok.string + " at begging of stmt");
-      continue;
+      break;
     case TokenType::NUM:
       ast.exprs.emplace_back(parseBasicStmt());
-      continue;
+      break;
 
     case TokenType::ASSIGN:
     case TokenType::INVALID:
       issueError("Wrong token at beggining");
-      continue;
+      break;
     case TokenType::SPACE:
       assert(false);
     }
@@ -46,18 +46,19 @@ static bool isEndStmt(TokenType type) {
 }
 
 // id = expr
-// | expr
+// id op expr
 std::unique_ptr<Expr> Parser::parseStmt() {
   auto varExpr = std::make_unique<VarExpr>(lexStream->string);
   ++lexStream;
   if (lexStream->type == TokenType::ASSIGN) {
+    ++lexStream;
     auto rhs = parseExpr();
-   return std::make_unique<AssignExpr>(std::move(*varExpr),
+    return std::make_unique<AssignExpr>(std::move(*varExpr),
                                                    std::move(rhs));
   }
 
   if (lexStream->type == TokenType::OPERATOR)
-    assert(false);
+    return parseBinOpRhs(std::move(varExpr), 0);
 
   if (isEndStmt(lexStream->type))
     return std::move(varExpr);
@@ -127,7 +128,9 @@ std::unique_ptr<Expr> Parser::parseBinOpRhs(std::unique_ptr<Expr> lhs,
 
 
     if (isEndStmt(lexStream->type))
-      return lhs;
+      return std::make_unique<BinaryExpr>(std::move(lhs),
+                                          getOperator(operatorChar),
+                                          std::move(rhs));
 
     if (lexStream->type != TokenType::OPERATOR)
       return issueError("Expected operator after expression");
@@ -136,7 +139,7 @@ std::unique_ptr<Expr> Parser::parseBinOpRhs(std::unique_ptr<Expr> lhs,
     assert(lexStream->string.size() == 1);
     char operatorChar2 = lexStream->string[0];
     auto prec2 = operatorPrecedence.at(operatorChar2);
-    if (prec < prec2) {
+    if (prec < prec2 || (operatorChar == '+' && operatorChar2 == '+')) {
       rhs = parseBinOpRhs(std::move(rhs), prec2);
       if (!rhs)
         return nullptr;

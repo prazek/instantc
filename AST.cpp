@@ -4,6 +4,7 @@
 
 int Expr::indentLevel;
 Expr::~Expr() {}
+
 void Expr::print() const {
   print(std::cerr);
 }
@@ -14,4 +15,11 @@ BinaryOperator getOperator(char op) {
     {'*', BinaryOperator::mul}, {'/', BinaryOperator::div}
   };
   return mapping.at(op);
+}
+std::ostream &operator<<(std::ostream &os, BinaryOperator op) {
+  static const std::unordered_map<BinaryOperator, char> mapping = {
+    {BinaryOperator::plus, '+'}, {BinaryOperator::minus, '-'},
+    {BinaryOperator::mul, '*'}, {BinaryOperator::div, '/'}
+  };
+  return os << mapping.at(op);
 }

@@ -74,8 +74,8 @@ TEST(ParserTest, AssignExpr) {
 
 }
 
-TEST(ParserTest, BinOp) {
-  std::string exprNum = "42+32; \n 1 + 2 + 3 * 3";
+TEST(ParserTest, AddOp) {
+  std::string exprNum = "1 + 2 + 3";
 
   std::istringstream iss{exprNum};
   Lexer lexer(iss);
@@ -83,11 +83,40 @@ TEST(ParserTest, BinOp) {
   Parser parser(stream);
   auto ast = parser.runParser();
 
+
   ASSERT_EQ(ast.exprs.size(), 1ul);
+
   auto &expr = ast.exprs[0];
   ASSERT_NE(expr, nullptr);
   auto* var = dynamic_cast<BinaryExpr*>(expr.get());
-  ASSERT_TRUE(var != nullptr);
+  ASSERT_NE(var, nullptr);
+  EXPECT_EQ(var->op, BinaryOperator::plus);
+  ASSERT_NE(var->lhs, nullptr);
+  ASSERT_NE(var->rhs, nullptr);
+
+  auto *lhs = dynamic_cast<ConstantExpr*>(var->lhs.get());
+  ASSERT_NE(lhs, nullptr);
+  EXPECT_EQ(lhs->value, 1);
+  auto *rhs = dynamic_cast<BinaryExpr*>(var->rhs.get());
+  ASSERT_NE(rhs, nullptr);
+}
+
+
+TEST(ParserTest, BinOp) {
+  std::string exprNum = "42+32; \n 1 + 2 + 3 * 4";
+
+  std::istringstream iss{exprNum};
+  Lexer lexer(iss);
+  LexStream stream(lexer);
+  Parser parser(stream);
+  auto ast = parser.runParser();
+
+  ASSERT_EQ(ast.exprs.size(), 2ul);
+
+  auto &expr = ast.exprs[0];
+  ASSERT_NE(expr, nullptr);
+  auto* var = dynamic_cast<BinaryExpr*>(expr.get());
+  ASSERT_NE(var, nullptr);
   EXPECT_EQ(var->op, BinaryOperator::plus);
   ASSERT_NE(var->lhs, nullptr);
   ASSERT_NE(var->rhs, nullptr);

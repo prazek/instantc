@@ -7,7 +7,7 @@ include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 add_subdirectory(${gtest_SOURCE_DIR})
 enable_testing()
 
-set(TEST_FILES LexerTests.cpp ParserTests.cpp)
+set(TEST_FILES LexerTests.cpp ParserTests.cpp LLVMCGTests.cpp JasminCGTests.cpp)
 set(SOURCE_FILES {$SOURCE_FILES} ${TEST_FILES})
 
 add_executable(runTests ${TEST_FILES})
