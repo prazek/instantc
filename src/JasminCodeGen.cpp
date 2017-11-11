@@ -99,9 +99,9 @@ int JasminCodeGen::optimizeStackHeight(AST &ast) {
   return result;
 }
 int JasminCodeGen::optimizeExprStackHeight(Expr &expr) {
-  if (auto *CE = dynamic_cast<ConstantExpr *>(&expr))
+  if (dynamic_cast<ConstantExpr *>(&expr))
   return 1;
-  if (auto *VE = dynamic_cast<VarExpr *>(&expr))
+  if (dynamic_cast<VarExpr *>(&expr))
   return 1;
   if (auto *BE = dynamic_cast<BinaryExpr *>(&expr)) {
     int lhsHeight = optimizeExprStackHeight(*BE->lhs);

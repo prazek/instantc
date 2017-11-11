@@ -8,8 +8,8 @@ set(SOURCE_FILES ${SOURCE_FILES} ${INSTC_LLVM_SOURCE_FILES})
 add_library(instc_lib ${INSTC_LLVM_SOURCE_FILES})
 
 
-add_executable(instc_llvm insc_llvm.cpp)
-add_executable(instc_jvm insc_jvm.cpp)
+add_executable(insc_llvm insc_llvm.cpp)
+add_executable(insc_jvm insc_jvm.cpp)
 
-target_link_libraries(instc_llvm instc_lib)
-target_link_libraries(instc_jvm instc_lib)
+target_link_libraries(insc_llvm instc_lib)
+target_link_libraries(insc_jvm instc_lib)
