@@ -37,10 +37,9 @@ int main(int argc, char *argv[]) {
   auto bcFileName = parsedFile + ".bc";
   std::fstream outFile(jasminFileName, std::ios_base::out);
 
-  JasminCodeGen CG(outFile);
+  JasminCodeGen CG(outFile, parsedFile);
   CG.emit(ast);
 
-  std::string command = "jasmin.jar " + jasminFileName;
+  std::string command = "java -jar jasmin.jar " + jasminFileName;
   std::system(command.c_str());
-
 }

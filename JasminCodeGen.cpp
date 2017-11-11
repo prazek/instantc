@@ -3,21 +3,23 @@
 #include <cassert>
 #include <utility>
 
-const std::string JasminCodeGen::prelude = ".class public Hello\n"
-  ".super java/lang/Object\n"
-  "; standard initializer\n"
-  ".method public <init>()V\n"
-  "  aload_0\n"
-  "  invokespecial java/lang/Object/<init>()V\n"
-  "  return\n"
-  ".end method\n";
+std::string JasminCodeGen::getPrelude() {
+  return ".class public " + className +
+      ".super java/lang/Object\n"
+      "; standard initializer\n"
+      ".method public <init>()V\n"
+      "  aload_0\n"
+      "  invokespecial java/lang/Object/<init>()V\n"
+      "  return\n"
+      ".end method\n\n";
+}
 
 void JasminCodeGen::emit(AST &ast) {
 
   int stackLimit = optimizeStackHeight(ast);
   int localsLimit = allocateLocalVariables(ast);
 
-  os << prelude;
+  os << getPrelude();
 
   os << ".method public static main([Ljava/lang/String;)V\n"
     "  .limit locals " << localsLimit << "\n"

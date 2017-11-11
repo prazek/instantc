@@ -6,7 +6,8 @@
 
 class JasminCodeGen {
 public:
-  JasminCodeGen(std::ostream &os) : os(os) {}
+  JasminCodeGen(std::ostream &os, std::string className)
+    : os(os), className(std::move(className)) {}
 
   void emit(AST& ast);
 
@@ -19,10 +20,11 @@ public:
   int allocateLocalVariables(const AST &ast);
   int optimizeStackHeight(AST &ast);
   int optimizeExprStackHeight(Expr &expr);
-  static const std::string prelude;
+  std::string getPrelude();
 private:
   std::unordered_map<std::string, int> localVariables;
   std::ostream &os;
+  std::string className;
 };
 
 

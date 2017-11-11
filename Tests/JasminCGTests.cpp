@@ -5,6 +5,7 @@
 #include "Parser.h"
 #include <sstream>
 
+static std::string prelude;
 
 static std::string getLLVMIR(std::string input) {
   std::istringstream iss{input};
@@ -14,7 +15,8 @@ static std::string getLLVMIR(std::string input) {
   auto ast = parser.runParser();
 
   std::stringstream ss;
-  JasminCodeGen cg(ss);
+  JasminCodeGen cg(ss, "Test");
+  prelude = cg.getPrelude();
   cg.emit(ast);
   return ss.str();
 }
@@ -22,7 +24,7 @@ static std::string getLLVMIR(std::string input) {
 TEST(JasminCGTest, Simple) {
   const std::string simple = "a = 1 +2 * 3;a";
   auto out = getLLVMIR(simple);
-  auto expected = JasminCodeGen::prelude +
+  auto expected = prelude +
     ".method public static main([Ljava/lang/String;)V\n"
     "  .limit locals 1\n"
     "  .limit stack 3\n"
@@ -47,7 +49,7 @@ TEST(JasminCGTest, Complex) {
     "2+2*2;\n"
     "a*b+2+2";
   auto out = getLLVMIR(complex);
-  auto expected = JasminCodeGen::prelude +
+  auto expected = prelude +
       ".method public static main([Ljava/lang/String;)V\n"
       "  .limit locals 2\n"
       "  .limit stack 3\n"

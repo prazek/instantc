@@ -23,10 +23,10 @@ TEST(LLVMCGTest, Simple) {
   auto out = getLLVMIR(simple);
   auto expected = LLVMCodeGen::prelude +
   "define i32 @main() {\n"
-  "  %0 = i32 mul 2, 3\n"
-  "  %1 = i32 add 1, %0\n"
-  "  %2 = i32 %1\n"
-  "  call void @printInt(i32 %2)\n\n"
+  "  %1 = mul i32 2, 3\n"
+  "  %2 = add i32 1, %1\n"
+  "  %3 = i32 %2\n"
+  "  call void @printInt(i32 %3)\n\n"
   "  ret i32 0\n"
   "}\n";
 
