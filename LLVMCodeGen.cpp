@@ -70,6 +70,6 @@ std::string LLVMCodeGen::emitBinaryExpr(const BinaryExpr &expr) {
     {BinaryOperator::mul, "mul"}, {BinaryOperator::div, "div"}
   };
 
-  os << "i32 " << mapping.at(expr.op) << " " << lhs << ", " << rhs << "\n";
+  os << mapping.at(expr.op) << " i32 " << lhs << ", " << rhs << "\n";
   return "%" + std::to_string(newValue);
 }

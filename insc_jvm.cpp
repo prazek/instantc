@@ -3,7 +3,7 @@
 #include "Lexer.h"
 #include "LexStream.h"
 #include "Parser.h"
-#include "LLVMCodeGen.h"
+#include "JasminCodeGen.h"
 
 
 std::string parseFileName(const std::string& fullName) {
@@ -33,14 +33,14 @@ int main(int argc, char *argv[]) {
   auto ast = parser.runParser();
 
   auto parsedFile = parseFileName(argv[1]);
-  auto llvmFileName = parsedFile + ".ll";
+  auto jasminFileName = parsedFile + ".j";
   auto bcFileName = parsedFile + ".bc";
-  std::fstream outFile(llvmFileName, std::ios_base::out);
+  std::fstream outFile(jasminFileName, std::ios_base::out);
 
-  LLVMCodeGen CG(outFile);
+  JasminCodeGen CG(outFile);
   CG.emit(ast);
 
-  std::string command = "llvm-as " + llvmFileName + " -o " + bcFileName;
+  std::string command = "jasmin.jar " + jasminFileName;
   std::system(command.c_str());
 
 }

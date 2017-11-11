@@ -118,6 +118,7 @@ std::unique_ptr<Expr> Parser::parseBinOpRhs(std::unique_ptr<Expr> lhs,
     assert(lexStream->string.size() == 1);
     char operatorChar = lexStream->string[0];
     auto prec = operatorPrecedence.at(operatorChar);
+    // TODO check this
     if (prec < startPrec)
       return lhs;
 

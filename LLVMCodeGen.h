@@ -24,7 +24,7 @@ public:
 private:
   std::string getNewValue();
   std::unordered_map<std::string, std::string> variables;
-  int currentVariable = 0;
+  int currentVariable = 1;
   std::ostream &os;
 };
 
