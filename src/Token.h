@@ -13,6 +13,8 @@ enum class TokenType {
   ID,
   NUM,
   SEMI,
+  OPEN_PAREN,
+  CLOSE_PAREN,
   END_FILE,
   INVALID
 };

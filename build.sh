@@ -6,4 +6,4 @@ mkdir build
 cd build
 cmake ../ -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$PWD/../
 cd ..
-cmake --build build
+cmake --build build -- -j

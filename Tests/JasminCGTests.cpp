@@ -26,7 +26,7 @@ TEST(JasminCGTest, Simple) {
   auto out = getLLVMIR(simple);
   auto expected = prelude +
     ".method public static main([Ljava/lang/String;)V\n"
-    "  .limit locals 1\n"
+    "  .limit locals 2\n"
     "  .limit stack 3\n"
     "  iconst_2\n"
     "  iconst_3\n"
@@ -35,7 +35,7 @@ TEST(JasminCGTest, Simple) {
     "  iadd\n"
     "  istore 0\n"
     "  iload 0\n"
-    "  invokestatic x/printInt(I)V\n"
+    "  invokestatic Test/printInt(I)V\n"
     "  return\n"
     ".end method\n";
 
@@ -51,7 +51,7 @@ TEST(JasminCGTest, Complex) {
   auto out = getLLVMIR(complex);
   auto expected = prelude +
       ".method public static main([Ljava/lang/String;)V\n"
-      "  .limit locals 2\n"
+      "  .limit locals 3\n"
       "  .limit stack 3\n"
       "  iconst_1\n"
       "  istore 0\n"
@@ -62,7 +62,7 @@ TEST(JasminCGTest, Complex) {
       "  imul\n"
       "  iconst_2\n"
       "  iadd\n"
-      "  invokestatic x/printInt(I)V\n"
+      "  invokestatic Test/printInt(I)V\n"
       "  iload 0\n"
       "  iload 1\n"
       "  imul\n"
@@ -70,7 +70,7 @@ TEST(JasminCGTest, Complex) {
       "  iconst_2\n"
       "  iadd\n"
       "  iadd\n"
-      "  invokestatic x/printInt(I)V\n"
+      "  invokestatic Test/printInt(I)V\n"
       "  return\n"
       ".end method\n";
 

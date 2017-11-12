@@ -6,11 +6,25 @@
 #include "JasminCodeGen.h"
 
 
-std::string parseFileName(const std::string& fullName) {
+std::string parseFilePath(const std::string& fullName) {
   auto dot = fullName.rfind('.');
   if (dot ==  std::string::npos)
     return fullName;
   return fullName.substr(0, dot);
+}
+
+std::string getFileName(const std::string &filePath) {
+  auto slash = filePath.rfind('/');
+  if (slash == std::string::npos)
+    return filePath;
+  return filePath.substr(slash + 1);
+}
+
+std::string getBasePath(const std::string &filePath) {
+  auto slash = filePath.rfind('/');
+  if (slash == std::string::npos)
+    return filePath;
+  return filePath.substr(0, slash);
 }
 
 int main(int argc, char *argv[]) {
@@ -32,14 +46,20 @@ int main(int argc, char *argv[]) {
   Parser parser(stream);
   auto ast = parser.runParser();
 
-  auto parsedFile = parseFileName(argv[1]);
+  auto parsedFile = parseFilePath(argv[1]);
   auto jasminFileName = parsedFile + ".j";
-  auto bcFileName = parsedFile + ".bc";
   std::fstream outFile(jasminFileName, std::ios_base::out);
 
-  JasminCodeGen CG(outFile, parsedFile);
-  CG.emit(ast);
+  auto className = getFileName(parsedFile);
 
-  std::string command = "java -jar jasmin.jar " + jasminFileName;
+  JasminCodeGen CG(outFile, className);
+  CG.emit(ast);
+  outFile.flush();
+  outFile.close();
+
+  auto classOutDir = getBasePath(parsedFile);
+  std::string command = "java -jar lib/jasmin.jar " +
+    jasminFileName + " -d " + classOutDir;
+  //std::cout << "executing [" << command + "]\n";
   std::system(command.c_str());
 }

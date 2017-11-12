@@ -47,16 +47,13 @@ std::string LLVMCodeGen::emitConstant(const ConstantExpr &expr) {
 }
 
 std::string LLVMCodeGen::emitVariableExpr(const VarExpr &expr) {
-  return "%" + variables.at(expr.name);
+  return variables.at(expr.name);
 }
 
 
 void LLVMCodeGen::emitAssignExpr(const AssignExpr &expr) {
   auto rhs = emitExpr(*expr.rhs);
-  auto value = currentVariable++;
-  os << "  %" << value << " = i32 " << rhs;
-  os << "\n";
-  variables[expr.variable.name] = std::to_string(value);
+  variables[expr.variable.name] = rhs;
 }
 
 std::string LLVMCodeGen::emitBinaryExpr(const BinaryExpr &expr) {
@@ -67,7 +64,7 @@ std::string LLVMCodeGen::emitBinaryExpr(const BinaryExpr &expr) {
 
   static const std::unordered_map<BinaryOperator, std::string> mapping = {
     {BinaryOperator::plus, "add"}, {BinaryOperator::minus, "sub"},
-    {BinaryOperator::mul, "mul"}, {BinaryOperator::div, "div"}
+    {BinaryOperator::mul, "mul"}, {BinaryOperator::div, "sdiv"}
   };
 
   os << mapping.at(expr.op) << " i32 " << lhs << ", " << rhs << "\n";

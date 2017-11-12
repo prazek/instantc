@@ -23,7 +23,11 @@ AST Parser::runParser() {
 
     case TokenType::ASSIGN:
     case TokenType::INVALID:
+    case TokenType::CLOSE_PAREN:
       issueError("Wrong token at beggining");
+      break;
+    case TokenType::OPEN_PAREN:
+      ast.exprs.emplace_back(parseExpr());
       break;
     case TokenType::SPACE:
       assert(false);
@@ -94,6 +98,15 @@ std::unique_ptr<Expr> Parser::parseBasicExpr() {
     ConstantExpr::data_type val = std::stoi((lexStream++)->string);
     return std::make_unique<ConstantExpr>(val);
   }
+  if (lexStream->type == TokenType::OPEN_PAREN) {
+    lexStream++;
+    auto e = parseExpr();
+    if (lexStream->type != TokenType::CLOSE_PAREN)
+      return issueError("Closing paren expected");
+    lexStream++;
+    return e;
+  }
+
   return nullptr;
 }
 
@@ -108,7 +121,7 @@ std::unique_ptr<Expr> Parser::parseBinOpRhs(std::unique_ptr<Expr> lhs,
   };
 
   while (true) {
-    if (isEndStmt(lexStream->type))
+    if (isEndStmt(lexStream->type) || lexStream->type == TokenType::CLOSE_PAREN)
       return lhs;
 
     if (lexStream->type != TokenType::OPERATOR)
@@ -128,7 +141,8 @@ std::unique_ptr<Expr> Parser::parseBinOpRhs(std::unique_ptr<Expr> lhs,
       return issueError("Expected expression after operator");
 
 
-    if (isEndStmt(lexStream->type))
+    if (isEndStmt(lexStream->type)
+      || lexStream->type == TokenType::CLOSE_PAREN)
       return std::make_unique<BinaryExpr>(std::move(lhs),
                                           getOperator(operatorChar),
                                           std::move(rhs));

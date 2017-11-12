@@ -4,5 +4,5 @@ all:
 	./build.sh
 
 clean:
-	rm -rf instc_llvm instc_jvm build/
+	rm -rf insc_llvm insc_jvm runTests build/
 

@@ -4,20 +4,31 @@
 #include <utility>
 
 std::string JasminCodeGen::getPrelude() {
-  return ".class public " + className +
+  return ".class public " + className + "\n"
       ".super java/lang/Object\n"
-      "; standard initializer\n"
+      "\n"
       ".method public <init>()V\n"
       "  aload_0\n"
       "  invokespecial java/lang/Object/<init>()V\n"
       "  return\n"
-      ".end method\n\n";
+      ".end method\n"
+      "\n"
+      ".method public static printInt(I)V \n"
+      "    .limit locals 10\n"
+      "    .limit stack 10\n"
+      "    iload 0\n"
+      "    getstatic java/lang/System/out Ljava/io/PrintStream; \n"
+      "    swap\n"
+      "    invokevirtual java/io/PrintStream/println(I)V \n"
+      "    return\n"
+      ".end method\n"
+      "\n";
 }
 
 void JasminCodeGen::emit(AST &ast) {
 
   int stackLimit = optimizeStackHeight(ast);
-  int localsLimit = allocateLocalVariables(ast);
+  int localsLimit = allocateLocalVariables(ast) + 1;
 
   os << getPrelude();
 
@@ -31,7 +42,7 @@ void JasminCodeGen::emit(AST &ast) {
       emitAssignExpr(*AE);
     else {
       emitExpr(*expr);
-      os << "  invokestatic x/printInt(I)V\n";
+      os << "  invokestatic " << className + "/printInt(I)V\n";
     }
   }
 
@@ -73,7 +84,7 @@ void JasminCodeGen::emitConstant(const ConstantExpr &expr) {
   if (0 <= expr.value && expr.value <= 4)
     os << "  iconst_" << expr.value << "\n";
   else
-    os << "  iconst " << expr.value << "\n";
+    os << "  ldc " << expr.value << "\n";
 }
 
 
@@ -106,7 +117,8 @@ int JasminCodeGen::optimizeExprStackHeight(Expr &expr) {
   if (auto *BE = dynamic_cast<BinaryExpr *>(&expr)) {
     int lhsHeight = optimizeExprStackHeight(*BE->lhs);
     int rhsHeight = optimizeExprStackHeight(*BE->rhs);
-    if (lhsHeight < rhsHeight) {
+    if (lhsHeight < rhsHeight &&
+      (BE->op == BinaryOperator::plus || BE->op == BinaryOperator::mul)) {
       std::swap(BE->lhs, BE->rhs);
     }
     return std::max(lhsHeight, 1 + rhsHeight);

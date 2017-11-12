@@ -25,8 +25,7 @@ TEST(LLVMCGTest, Simple) {
   "define i32 @main() {\n"
   "  %1 = mul i32 2, 3\n"
   "  %2 = add i32 1, %1\n"
-  "  %3 = i32 %2\n"
-  "  call void @printInt(i32 %3)\n\n"
+  "  call void @printInt(i32 %2)\n\n"
   "  ret i32 0\n"
   "}\n";
 

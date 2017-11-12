@@ -46,6 +46,11 @@ private:
     case '-':
     case '/':
       return getOperator();
+
+    case '(':
+      return Token{TokenType::OPEN_PAREN, std::string(1, char(ifs_.get()))};
+    case ')':
+      return Token{TokenType::CLOSE_PAREN, std::string(1, char(ifs_.get()))};
     default:
       assert(false);
     }
