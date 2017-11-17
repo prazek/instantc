@@ -12,6 +12,12 @@ const std::string LLVMCodeGen::prelude =
   "  ret void\n"
   "}\n";
 
+static void issueError(const std::string &s) {
+  printf("used of undeclared variable %s\n", s.c_str());
+  exit(1);
+}
+
+
 void LLVMCodeGen::emit(const AST &ast) {
   os << prelude;
 
@@ -47,6 +53,8 @@ std::string LLVMCodeGen::emitConstant(const ConstantExpr &expr) {
 }
 
 std::string LLVMCodeGen::emitVariableExpr(const VarExpr &expr) {
+  if (variables.count(expr.name))
+    issueError(expr.name);
   return variables.at(expr.name);
 }
 

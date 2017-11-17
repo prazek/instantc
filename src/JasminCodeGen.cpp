@@ -25,6 +25,11 @@ std::string JasminCodeGen::getPrelude() {
       "\n";
 }
 
+static void issueError(const std::string &s) {
+  printf("used of undeclared variable %s\n", s.c_str());
+  exit(1);
+}
+
 void JasminCodeGen::emit(AST &ast) {
 
   int stackLimit = optimizeStackHeight(ast);
@@ -51,7 +56,8 @@ void JasminCodeGen::emit(AST &ast) {
 }
 void JasminCodeGen::emitAssignExpr(const AssignExpr &expr) {
   emitExpr(*expr.rhs);
-
+  if (localVariables.count(expr.variable.name))
+    issueError(expr.variable.name);
   os << "  istore " << localVariables.at(expr.variable.name) << "\n";
 
 }
@@ -77,6 +83,8 @@ void JasminCodeGen::emitBinaryExpr(const BinaryExpr &expr) {
 }
 
 void JasminCodeGen::emitVariableExpr(const VarExpr &expr) {
+  if (localVariables.count(expr.name))
+    issueError(expr.name);
   os << "  iload " << localVariables.at(expr.name) << "\n";
 }
 
@@ -95,9 +103,7 @@ int JasminCodeGen::allocateLocalVariables(const AST &ast) {
       if (localVariables.count(AE->variable.name) == 0) {
         localVariables[AE->variable.name] = localsCount++;
       }
-
     }
-
   }
 
   return localsCount;
