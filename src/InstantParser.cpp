@@ -2,7 +2,6 @@
 // Generated from Instant.g4 by ANTLR 4.7
 
 
-#include "InstantListener.h"
 #include "InstantVisitor.h"
 
 #include "InstantParser.h"
@@ -50,19 +49,6 @@ InstantParser::StmtContext* InstantParser::ProgramContext::stmt(size_t i) {
 size_t InstantParser::ProgramContext::getRuleIndex() const {
   return InstantParser::RuleProgram;
 }
-
-void InstantParser::ProgramContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterProgram(this);
-}
-
-void InstantParser::ProgramContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitProgram(this);
-}
-
 
 antlrcpp::Any InstantParser::ProgramContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
@@ -140,17 +126,6 @@ InstantParser::ExprContext* InstantParser::SExprContext::expr() {
 
 InstantParser::SExprContext::SExprContext(StmtContext *ctx) { copyFrom(ctx); }
 
-void InstantParser::SExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterSExpr(this);
-}
-void InstantParser::SExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitSExpr(this);
-}
-
 antlrcpp::Any InstantParser::SExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
     return parserVisitor->visitSExpr(this);
@@ -168,17 +143,6 @@ InstantParser::ExprContext* InstantParser::AssignExprContext::expr() {
 }
 
 InstantParser::AssignExprContext::AssignExprContext(StmtContext *ctx) { copyFrom(ctx); }
-
-void InstantParser::AssignExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterAssignExpr(this);
-}
-void InstantParser::AssignExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitAssignExpr(this);
-}
 
 antlrcpp::Any InstantParser::AssignExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
@@ -256,17 +220,6 @@ InstantParser::ExprContext* InstantParser::MulExprContext::expr(size_t i) {
 
 InstantParser::MulExprContext::MulExprContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void InstantParser::MulExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterMulExpr(this);
-}
-void InstantParser::MulExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitMulExpr(this);
-}
-
 antlrcpp::Any InstantParser::MulExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
     return parserVisitor->visitMulExpr(this);
@@ -280,17 +233,6 @@ tree::TerminalNode* InstantParser::ConstExprContext::INT() {
 }
 
 InstantParser::ConstExprContext::ConstExprContext(ExprContext *ctx) { copyFrom(ctx); }
-
-void InstantParser::ConstExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterConstExpr(this);
-}
-void InstantParser::ConstExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitConstExpr(this);
-}
 
 antlrcpp::Any InstantParser::ConstExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
@@ -310,17 +252,6 @@ InstantParser::ExprContext* InstantParser::DivExprContext::expr(size_t i) {
 
 InstantParser::DivExprContext::DivExprContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void InstantParser::DivExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterDivExpr(this);
-}
-void InstantParser::DivExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitDivExpr(this);
-}
-
 antlrcpp::Any InstantParser::DivExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
     return parserVisitor->visitDivExpr(this);
@@ -339,17 +270,6 @@ InstantParser::ExprContext* InstantParser::SubExprContext::expr(size_t i) {
 
 InstantParser::SubExprContext::SubExprContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void InstantParser::SubExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterSubExpr(this);
-}
-void InstantParser::SubExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitSubExpr(this);
-}
-
 antlrcpp::Any InstantParser::SubExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
     return parserVisitor->visitSubExpr(this);
@@ -364,17 +284,6 @@ tree::TerminalNode* InstantParser::VarExprContext::IDENT() {
 
 InstantParser::VarExprContext::VarExprContext(ExprContext *ctx) { copyFrom(ctx); }
 
-void InstantParser::VarExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterVarExpr(this);
-}
-void InstantParser::VarExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitVarExpr(this);
-}
-
 antlrcpp::Any InstantParser::VarExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
     return parserVisitor->visitVarExpr(this);
@@ -388,17 +297,6 @@ InstantParser::ExprContext* InstantParser::ParensExprContext::expr() {
 }
 
 InstantParser::ParensExprContext::ParensExprContext(ExprContext *ctx) { copyFrom(ctx); }
-
-void InstantParser::ParensExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterParensExpr(this);
-}
-void InstantParser::ParensExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitParensExpr(this);
-}
 
 antlrcpp::Any InstantParser::ParensExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
@@ -417,17 +315,6 @@ InstantParser::ExprContext* InstantParser::AddExprContext::expr(size_t i) {
 }
 
 InstantParser::AddExprContext::AddExprContext(ExprContext *ctx) { copyFrom(ctx); }
-
-void InstantParser::AddExprContext::enterRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->enterAddExpr(this);
-}
-void InstantParser::AddExprContext::exitRule(tree::ParseTreeListener *listener) {
-  auto parserListener = dynamic_cast<InstantListener *>(listener);
-  if (parserListener != nullptr)
-    parserListener->exitAddExpr(this);
-}
 
 antlrcpp::Any InstantParser::AddExprContext::accept(tree::ParseTreeVisitor *visitor) {
   if (auto parserVisitor = dynamic_cast<InstantVisitor*>(visitor))
@@ -587,7 +474,7 @@ bool InstantParser::sempred(RuleContext *context, size_t ruleIndex, size_t predi
   return true;
 }
 
-bool InstantParser::exprSempred(ExprContext */*_localctx*/, size_t predicateIndex) {
+bool InstantParser::exprSempred(ExprContext *_localctx, size_t predicateIndex) {
   switch (predicateIndex) {
     case 0: return precpred(_ctx, 7);
     case 1: return precpred(_ctx, 6);
