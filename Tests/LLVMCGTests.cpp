@@ -14,7 +14,6 @@ static std::string getLLVMIR(std::string inputCode) {
   std::stringstream ss;
 
 
-
   ANTLRInputStream input(iss);
   InstantLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
@@ -23,12 +22,11 @@ static std::string getLLVMIR(std::string inputCode) {
 
   InstantParser parser(&tokens);
   auto program = parser.program();
-
   Diagnostic diagnostic("UNITTESGING.ins");
-
-  StaticAnalysis staticAnalysis(diagnostic);
-  staticAnalysis.visit(program);
-
+  {
+    StaticAnalysis staticAnalysis(diagnostic);
+    staticAnalysis.visit(program);
+  }
   LLVMCodeGenVisitor visitor(ss);
   visitor.visit(program);
   std::cout.flush();
