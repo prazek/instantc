@@ -22,12 +22,15 @@ endif()
 set(COMMON_INCLUDES ${PROJECT_SOURCE_DIR}/src)
 
 
-include_directories(${PROJECT_SOURCE_DIR}/antlr4-runtime/
-        ${PROJECT_SOURCE_DIR}/antlr4-runtime/misc
-        ${PROJECT_SOURCE_DIR}/antlr4-runtime/atn
-        ${PROJECT_SOURCE_DIR}/antlr4-runtime/dfa
-        ${PROJECT_SOURCE_DIR}/antlr4-runtime/tree
-        ${PROJECT_SOURCE_DIR}/antlr4-runtime/support)
+SET(antlr_sources "${PROJECT_SOURCE_DIR}/thirdparty/antlr4/runtime/Cpp/runtime/src/")
+message(${antlr_sources})
+include_directories(
+        ${antlr_sources}/
+        ${antlr_sources}/misc
+        ${antlr_sources}atn
+        ${antlr_sources}/dfa
+        ${antlr_sources}/tree
+        ${antlr_sources}/support)
 
 
 

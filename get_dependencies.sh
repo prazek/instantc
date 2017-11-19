@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
-cd Tests
+pushd Tests
 git clone https://github.com/google/googletest.git
+popd
+
+pushd thirdparty
+git clone https://github.com/antlr/antlr4.git
+popd

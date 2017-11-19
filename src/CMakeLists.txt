@@ -23,5 +23,5 @@ add_library(instant_lib ${antlr_files})
 
 add_executable(llvm llvm.cpp)
 target_link_libraries(llvm instant_lib)
-target_link_libraries(llvm ${PROJECT_SOURCE_DIR}/lib/libantlr4-runtime.a)
-
+#target_link_libraries(llvm ${PROJECT_SOURCE_DIR}/lib/libantlr4-runtime.a)
+target_link_libraries(llvm ${PROJECT_SOURCE_DIR}/thirdparty/antlr-build/lib/libantlr4-runtime.a)

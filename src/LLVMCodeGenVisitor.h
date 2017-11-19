@@ -22,11 +22,11 @@ public:
 
   virtual antlrcpp::Any visitAssignExpr(InstantParser::AssignExprContext *ctx) override {
     assert(ctx->children.size() == 3);
-    std::string rhs = visit(ctx->children[2]);
+    std::string rhs = visit(ctx->children.at(2));
 
-    auto varName = ctx->children[0]->getText();
+    auto varName = ctx->children.at(0)->getText();
     variables_[varName] = rhs;
-    return "%" + varName;
+    return {};
   }
 
   virtual antlrcpp::Any visitSExpr(InstantParser::SExprContext *ctx) override {
@@ -34,7 +34,7 @@ public:
     std::string expr = visitChildren(ctx);
     os << "  call void @printInt(i32 " << expr << ")\n";
     os << "\n";
-    return expr;
+    return {};
   }
 
   virtual antlrcpp::Any visitMulExpr(InstantParser::MulExprContext *ctx) override {
@@ -71,8 +71,8 @@ private:
   std::string handleOperator(InstantParser::ExprContext *ctx, const std::string &opInstr) {
     assert(ctx->children.size() == 3);
 
-    std::string lhs = visit(ctx->children[0]);
-    std::string rhs = visit(ctx->children[2]);
+    std::string lhs = visit(ctx->children.at(0));
+    std::string rhs = visit(ctx->children.at(2));
     // FIXME: handle overflow?
     auto newValue = currentVariable++;
     os << "  %" << newValue << " = " << opInstr << " i32 " << lhs << ", " << rhs << "\n";

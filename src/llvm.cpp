@@ -1,14 +1,9 @@
-#include <iostream>
 
 #include "antlr4-runtime.h"
 #include "InstantLexer.h"
 #include "InstantParser.h"
 #include "StaticAnalysis.h"
 #include "LLVMCodeGenVisitor.h"
-
-using namespace antlr4;
-
-
 #include <iostream>
 
 
@@ -41,11 +36,11 @@ int main(int argc, const char* argv[]) {
   InstantParser parser(&tokens);
   auto program = parser.program();
 
-  Diagnostic diagnostic(fileName);
-
-  StaticAnalysis staticAnalysis(diagnostic);
-  staticAnalysis.visit(program);
-
+  {
+    Diagnostic diagnostic(fileName);
+    //StaticAnalysis staticAnalysis(diagnostic);
+    //staticAnalysis.visit(program);
+  }
   LLVMCodeGenVisitor visitor(std::cout);
   visitor.visit(program);
   std::cout.flush();
