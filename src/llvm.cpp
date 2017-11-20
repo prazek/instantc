@@ -3,6 +3,7 @@
 #include "common.h"
 #include "StaticAnalysis.h"
 #include "LLVMCodeGenVisitor.h"
+#include "InstantLexer.h"
 #include <iostream>
 
 
@@ -31,6 +32,7 @@ int main(int argc, const char* argv[]) {
     printf("Usage: %s file.ins\n", argv[0]);
     exit(1);
   }
+
   std::string fileName = argv[1];
   auto file = openFile(argv[1]);
   auto parsedFile = parseFileName(argv[1]);
@@ -39,7 +41,17 @@ int main(int argc, const char* argv[]) {
   std::fstream outFile(llvmFileName, std::ios_base::out);
 
 
-  auto ast = getAST(file, fileName);
+  ANTLRInputStream input(file);
+  InstantLexer lexer(&input);
+  CommonTokenStream tokens(&lexer);
+  tokens.fill();
+
+  InstantParser parser(&tokens);
+  auto *ast = parser.program();
+
+  Diagnostic diagnostic(fileName);
+  StaticAnalysis staticAnalysis(diagnostic);
+  staticAnalysis.visit(ast);
 
   LLVMCodeGenVisitor visitor(outFile);
   visitor.visit(ast);
