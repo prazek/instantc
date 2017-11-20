@@ -38,7 +38,5 @@ public:
     virtual antlrcpp::Any visitParensExpr(InstantParser::ParensExprContext *context) = 0;
 
     virtual antlrcpp::Any visitAddExpr(InstantParser::AddExprContext *context) = 0;
-
-
 };
 

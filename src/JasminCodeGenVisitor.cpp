@@ -46,7 +46,11 @@ antlrcpp::Any JasminCodeGenVisitor::visitAssignExpr(InstantParser::AssignExprCon
   visit(ctx->children.at(2));
   auto varName = ctx->children.at(0)->getText();
 
-  os << "  istore " << variablesAllocator.variablePosition(varName) << "\n";
+  auto stackPos = variablesAllocator.variablePosition(varName);
+  if (0 <= stackPos && stackPos <= 3)
+    os << "  istore_" << stackPos << "\n";
+  else
+    os << "  istore " << stackPos << "\n";
   return {};
 }
 
@@ -61,11 +65,25 @@ antlrcpp::Any JasminCodeGenVisitor::visitMulExpr(InstantParser::MulExprContext *
 }
 
 antlrcpp::Any JasminCodeGenVisitor::visitConstExpr(InstantParser::ConstExprContext *ctx) {
-  long long value = atoll(ctx->getText().c_str());
-  if (0 <= value && value <= 4)
-    os << "  iconst_" << value << "\n";
-  else // TODO push
-    os << "  ldc " << value << "\n";
+  auto value = atoll(ctx->getText().c_str());
+
+  if (value == -1) {
+    os << "  iconst_m1\n";
+    return {};
+  }
+
+  auto isel = [](long long value) {
+    if (0 <= value && value <= 5)
+      return "iconst_";
+    if (-128 <= value && value < 127)
+      return "bipush ";
+    if (-32768 <= value && value < 32767)
+      return "sipush ";
+    else
+      return "ldc ";
+  };
+
+  os << "  " << isel(value) << value << "\n";
   return {};
 }
 
@@ -77,7 +95,11 @@ antlrcpp::Any JasminCodeGenVisitor::visitSubExpr(InstantParser::SubExprContext *
 }
 
 antlrcpp::Any JasminCodeGenVisitor::visitVarExpr(InstantParser::VarExprContext *ctx) {
-  os << "  iload " << variablesAllocator.variablePosition(ctx->getText()) << "\n";
+  auto stackPos = variablesAllocator.variablePosition(ctx->getText());
+  if (0 <= stackPos && stackPos <= 3)
+    os << "  iload_" << stackPos << "\n";
+  else
+    os << "  iload " << stackPos << "\n";
   return {};
 }
 
@@ -95,6 +117,12 @@ antlrcpp::Any JasminCodeGenVisitor::handleOperator(InstantParser::ExprContext *c
   visit(ctx->children.at(0));
   visit(ctx->children.at(2));
   os << "  " << opInst << '\n';
+  return {};
+}
+
+antlrcpp::Any JasminCodeGenVisitor::visitSwap(SwapContext *ctx) {
+  os << "  swap\n";
+  visitChildren(ctx);
   return {};
 }
 

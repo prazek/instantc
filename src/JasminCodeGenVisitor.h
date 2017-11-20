@@ -1,11 +1,11 @@
 #pragma once
 
 #include "antlr4-runtime.h"
-#include "InstantVisitor.h"
+#include "JasminVisitor.h"
 #include "VariableAllocator.h"
 #include "StackHeightOptimizer.h"
 
-class  JasminCodeGenVisitor : public InstantVisitor {
+class  JasminCodeGenVisitor : public JasminVisitor {
 public:
   JasminCodeGenVisitor(std::ostream &os, std::string className)
     : os(os),
@@ -22,6 +22,8 @@ public:
   antlrcpp::Any visitVarExpr(InstantParser::VarExprContext *ctx) override;
   antlrcpp::Any visitParensExpr(InstantParser::ParensExprContext *ctx) override;
   antlrcpp::Any visitAddExpr(InstantParser::AddExprContext *ctx) override;
+  antlrcpp::Any visitSwap(SwapContext *ctx) override;
+
 
 private:
   antlrcpp::Any handleOperator(InstantParser::ExprContext *ctx, const std::string &opInst);

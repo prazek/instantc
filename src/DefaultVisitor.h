@@ -1,9 +1,9 @@
 #pragma once
 
 #include "antlr4-runtime.h"
-#include "InstantVisitor.h"
+#include "JasminVisitor.h"
 
-class  DefaultVisitor : public InstantVisitor {
+class  DefaultVisitor : public JasminVisitor {
 public:
 
   antlrcpp::Any visitProgram(InstantParser::ProgramContext *ctx) override {
@@ -46,6 +46,10 @@ public:
   }
 
   antlrcpp::Any visitAddExpr(InstantParser::AddExprContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  antlrcpp::Any visitSwap(SwapContext *ctx) override {
     return visitChildren(ctx);
   }
 

@@ -48,6 +48,7 @@ public:
     return handleOperator(ctx, true);
   }
 
+
 private:
   int handleOperator(InstantParser::ExprContext *ctx, bool alternativeOp) {
     assert(ctx->children.size() == 3);
@@ -55,7 +56,16 @@ private:
     int lhsHeight = visit(lhs);
     auto &rhs = ctx->children.at(2);
     int rhsHeight = visit(rhs);
-    if (lhsHeight < rhsHeight && alternativeOp) {
+    if (lhsHeight < rhsHeight) {
+      if (!alternativeOp) {
+        // insert swap.
+        auto *swap = new SwapContext(nullptr);
+        swap->children.push_back(ctx);
+        auto it = std::find(ctx->parent->children.begin(),
+                            ctx->parent->children.end(), ctx);
+        assert(it != ctx->parent->children.end());
+        *it = swap;
+      }
       std::swap(lhs, rhs);
     }
     return std::max(lhsHeight, 1 + rhsHeight);
