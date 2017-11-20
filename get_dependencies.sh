@@ -5,4 +5,7 @@ popd
 
 pushd thirdparty
 git clone https://github.com/antlr/antlr4.git
+cd antlr4
+git reset --hard 4.7
+cd ..
 popd
