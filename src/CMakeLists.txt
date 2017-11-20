@@ -13,7 +13,7 @@ set(INSTC_LLVM_SOURCE_FILES "")
 
 set(antlr_files LLVMCodeGenVisitor.cpp LLVMCodeGenVisitor.h
         InstantLexer.cpp InstantLexer.h InstantLexer.tokens InstantParser.cpp
-        InstantParser.h StaticAnalysis.cpp StaticAnalysis.h Diagnostic.cpp Diagnostic.h)
+        InstantParser.h StaticAnalysis.cpp StaticAnalysis.h Diagnostic.cpp Diagnostic.h common.h)
 
 set(SOURCE_FILES ${SOURCE_FILES} ${INSTC_LLVM_SOURCE_FILES} ${antlr_files})
 

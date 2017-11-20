@@ -32,16 +32,6 @@ int main(int argc, char *argv[]) {
   Parser parser(stream);
   auto ast = parser.runParser();
   //std::cout << ast;
-  auto parsedFile = parseFileName(argv[1]);
-  auto llvmFileName = parsedFile + ".ll";
-  auto bcFileName = parsedFile + ".bc";
-  std::fstream outFile(llvmFileName, std::ios_base::out);
 
-  LLVMCodeGen CG(outFile);
-  CG.emit(ast);
-  outFile.flush();
-
-  std::string command = "llvm-as " + llvmFileName + " -o " + bcFileName;
-  std::system(command.c_str());
 
 }

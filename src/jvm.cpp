@@ -44,7 +44,7 @@ int main(int argc, const char* argv[]) {
   LLVMCodeGenVisitor visitor(outFile);
   visitor.visit(ast);
   outFile.flush();
-
+  
   std::string command = "llvm-as " + llvmFileName + " -o " + bcFileName;
   std::system(command.c_str());
 
