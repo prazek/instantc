@@ -28,7 +28,7 @@ public:
   }
 
   antlrcpp::Any visitDivExpr(InstantParser::DivExprContext *ctx) override {
-    return handleOperator(ctx, true);
+    return handleOperator(ctx, false);
   }
 
   antlrcpp::Any visitSubExpr(InstantParser::SubExprContext *ctx) override {
@@ -57,18 +57,28 @@ private:
     auto &rhs = ctx->children.at(2);
     int rhsHeight = visit(rhs);
     if (lhsHeight < rhsHeight) {
-      if (!alternativeOp) {
-        // insert swap.
-        auto *swap = new SwapContext(nullptr);
-        swap->children.push_back(ctx);
-        auto it = std::find(ctx->parent->children.begin(),
-                            ctx->parent->children.end(), ctx);
-        assert(it != ctx->parent->children.end());
-        *it = swap;
-      }
+      if (!alternativeOp)
+        insertSwapAsParent(ctx);
+
       std::swap(lhs, rhs);
+      std::swap(lhsHeight, rhsHeight);
     }
     return std::max(lhsHeight, 1 + rhsHeight);
   }
 
+  void insertSwapAsParent(InstantParser::ExprContext *ctx) {
+    auto *swap = new SwapContext(nullptr); // FIXME data leak.
+    // Set swap children and parent.
+    swap->children.push_back(ctx);
+    swap->parent = ctx->parent;
+
+    // Replace parent's child with swap.
+    auto it = std::find(ctx->parent->children.begin(),
+                        ctx->parent->children.end(), ctx);
+    assert(it != ctx->parent->children.end());
+    *it = swap;
+
+    // Set new parent.
+    ctx->parent = swap;
+  }
 };

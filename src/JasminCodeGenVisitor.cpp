@@ -116,13 +116,15 @@ antlrcpp::Any JasminCodeGenVisitor::handleOperator(InstantParser::ExprContext *c
   assert(ctx->children.size() == 3);
   visit(ctx->children.at(0));
   visit(ctx->children.at(2));
+  if (dynamic_cast<SwapContext*>(ctx->parent))
+    os << "  swap\n";
   os << "  " << opInst << '\n';
   return {};
 }
 
 antlrcpp::Any JasminCodeGenVisitor::visitSwap(SwapContext *ctx) {
-  os << "  swap\n";
   visitChildren(ctx);
+  //os << "  swap\n"; // todo remove
   return {};
 }
 

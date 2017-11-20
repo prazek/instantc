@@ -25,13 +25,12 @@ add_library(instant_lib ${antlr_files})
 
 
 
-add_executable(llvm llvm.cpp)
-target_link_libraries(llvm instant_lib)
-#target_link_libraries(llvm ${PROJECT_SOURCE_DIR}/lib/libantlr4-runtime.a)
-target_link_libraries(llvm ${PROJECT_SOURCE_DIR}/thirdparty/antlr-build/lib/libantlr4-runtime.a)
+add_executable(insc_llvm llvm.cpp)
+target_link_libraries(insc_llvm instant_lib)
+target_link_libraries(insc_llvm ${PROJECT_SOURCE_DIR}/thirdparty/antlr-build/lib/libantlr4-runtime.a)
 
 
-add_executable(jvm jvm.cpp)
-target_link_libraries(jvm instant_lib)
+add_executable(insc_jvm jvm.cpp)
+target_link_libraries(insc_jvm instant_lib)
 #target_link_libraries(llvm ${PROJECT_SOURCE_DIR}/lib/libantlr4-runtime.a)
-target_link_libraries(jvm ${PROJECT_SOURCE_DIR}/thirdparty/antlr-build/lib/libantlr4-runtime.a)
+target_link_libraries(insc_jvm ${PROJECT_SOURCE_DIR}/thirdparty/antlr-build/lib/libantlr4-runtime.a)
