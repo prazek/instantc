@@ -5,7 +5,7 @@
 #include "InstantLexer.h"
 #include "InstantParser.h"
 #include "StaticAnalysis.h"
-#include "LLVMCodeGenVisitor.h"
+#include "LLVMCodeGen.h"
 #include "common.h"
 #include <sstream>
 
@@ -26,7 +26,7 @@ static std::string getLLVMIR(std::string inputCode) {
   StaticAnalysis staticAnalysis(diagnostic);
   staticAnalysis.visit(ast);
 
-  LLVMCodeGenVisitor visitor(ss);
+  LLVMCodeGen visitor(ss);
   visitor.visit(ast);
 
   return ss.str();
@@ -35,7 +35,7 @@ static std::string getLLVMIR(std::string inputCode) {
 TEST(LLVMCGTest, Simple) {
   const std::string simple = "a = 1 +2 * 3;a";
   auto out = getLLVMIR(simple);
-  auto expected = LLVMCodeGenVisitor::prelude +
+  auto expected = LLVMCodeGen::prelude +
   "define i32 @main() {\n"
   "  %1 = mul i32 2, 3\n"
   "  %2 = add i32 1, %1\n"
@@ -53,7 +53,7 @@ TEST(LLVMCGTest, Complex) {
     "a=1;b=2;c=1;d=2;e=1;f=2;g=1;h=2;i=1;j=2;k=1;l=2;m=1;n=2;\n"
     "(2*a+b/2+c+d+e+f+g+h+i+j/2+k+l+m+n)/10\n";
   auto out = getLLVMIR(complex);
-  auto expected = LLVMCodeGenVisitor::prelude +
+  auto expected = LLVMCodeGen::prelude +
       "define i32 @main() {\n"
       "  %1 = mul i32 0, 1\n"
       "  %2 = mul i32 0, 1\n"

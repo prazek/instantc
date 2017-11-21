@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 #include "antlr4-runtime.h"
 #include "common.h"
-#include "JasminCodeGenVisitor.h"
+#include "JasminCodeGen.h"
 
 #include "InstantLexer.h"
 #include "StaticAnalysis.h"

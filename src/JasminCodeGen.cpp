@@ -1,4 +1,4 @@
-#include "JasminCodeGenVisitor.h"
+#include "JasminCodeGen.h"
 #include <cstdlib>
 
 std::string JasminCodeGenVisitor::getPrelude() const {

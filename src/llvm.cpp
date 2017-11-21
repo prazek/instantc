@@ -2,7 +2,7 @@
 #include "antlr4-runtime.h"
 #include "common.h"
 #include "StaticAnalysis.h"
-#include "LLVMCodeGenVisitor.h"
+#include "LLVMCodeGen.h"
 #include "InstantLexer.h"
 #include <iostream>
 
@@ -53,7 +53,7 @@ int main(int argc, const char* argv[]) {
   StaticAnalysis staticAnalysis(diagnostic);
   staticAnalysis.visit(ast);
 
-  LLVMCodeGenVisitor visitor(outFile);
+  LLVMCodeGen visitor(outFile);
   visitor.visit(ast);
   outFile.flush();
 

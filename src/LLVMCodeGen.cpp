@@ -1,6 +1,6 @@
-#include "LLVMCodeGenVisitor.h"
+#include "LLVMCodeGen.h"
 
-const std::string LLVMCodeGenVisitor::prelude =
+const std::string LLVMCodeGen::prelude =
   "@dnl = internal constant [4 x i8] c\"%d\\0A\\00\"\n"
   "declare i32 @printf(i8*, ...)\n"
   " \n"

@@ -8,5 +8,5 @@ antlrcpp::Any SwapContext::accept(antlr4::tree::ParseTreeVisitor  *visitor) {
 
 }
 
-SwapContext::SwapContext(InstantParser::ExprContext *ctx) {
+SwapContext::SwapContext(InstantParser::ExprContext *) {
 }

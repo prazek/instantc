@@ -6,10 +6,10 @@
 #include <string>
 
 
-class  LLVMCodeGenVisitor : public InstantVisitor {
+class  LLVMCodeGen : public InstantVisitor {
 public:
 
-  LLVMCodeGenVisitor(std::ostream &os) : os(os) {}
+  LLVMCodeGen(std::ostream &os) : os(os) {}
 
   antlrcpp::Any visitProgram(InstantParser::ProgramContext *ctx) override {
     os << prelude;

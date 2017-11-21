@@ -11,10 +11,10 @@ set(INSTC_LLVM_SOURCE_FILES "")
 
 
 
-set(antlr_files LLVMCodeGenVisitor.cpp LLVMCodeGenVisitor.h
+set(antlr_files LLVMCodeGen.cpp LLVMCodeGen.h
         InstantLexer.cpp InstantLexer.h InstantLexer.tokens InstantParser.cpp
         InstantParser.h StaticAnalysis.cpp StaticAnalysis.h Diagnostic.cpp Diagnostic.h common.h
-        JasminCodeGenVisitor.cpp JasminCodeGenVisitor.h VariableAllocator.cpp
+        JasminCodeGen.cpp JasminCodeGen.h VariableAllocator.cpp
         VariableAllocator.h DefaultVisitor.h DefaultVisitor.cpp StackHeightOptimizer.cpp
         StackHeightOptimizer.h common.cpp JasminVisitor.cpp JasminVisitor.h
         InstantVisitor.cpp InstantVisitor.h)

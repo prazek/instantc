@@ -474,7 +474,7 @@ bool InstantParser::sempred(RuleContext *context, size_t ruleIndex, size_t predi
   return true;
 }
 
-bool InstantParser::exprSempred(ExprContext *_localctx, size_t predicateIndex) {
+bool InstantParser::exprSempred(ExprContext */*_localctx*/, size_t predicateIndex) {
   switch (predicateIndex) {
     case 0: return precpred(_ctx, 7);
     case 1: return precpred(_ctx, 6);

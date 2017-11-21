@@ -2,8 +2,8 @@
 #include "antlr4-runtime.h"
 #include "common.h"
 #include "StaticAnalysis.h"
-#include "LLVMCodeGenVisitor.h"
-#include "JasminCodeGenVisitor.h"
+#include "LLVMCodeGen.h"
+#include "JasminCodeGen.h"
 #include "InstantLexer.h"
 #include <iostream>
 
