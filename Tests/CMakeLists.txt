@@ -1,10 +1,9 @@
 
-set(gtest_SOURCE_DIR "googletest/googletest")
 include_directories(${COMMON_INCLUDES})
 
-
-include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-add_subdirectory(${gtest_SOURCE_DIR})
+add_subdirectory(gtest)
+#include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
+#add_subdirectory(${gtest_SOURCE_DIR})
 enable_testing()
 
 set(TEST_FILES  LLVMCGTests.cpp JasminCGTests.cpp)
