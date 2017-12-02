@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-./get_dependencies.sh
-cd thirdparty
-./build_antlr.sh
-cd ..
-
 mkdir build
 cd build
 cmake ../ -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=$PWD/../

@@ -1,9 +1,7 @@
-
+message("includes: ${COMMON_INCLUDES}")
 include_directories(${COMMON_INCLUDES})
 
 add_subdirectory(gtest)
-#include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
-#add_subdirectory(${gtest_SOURCE_DIR})
 enable_testing()
 
 set(TEST_FILES  LLVMCGTests.cpp JasminCGTests.cpp)
@@ -13,7 +11,7 @@ add_executable(runTests ${TEST_FILES})
 
 target_link_libraries(runTests gtest gtest_main)
 target_link_libraries(runTests instant_lib)
-target_link_libraries(runTests ${PROJECT_SOURCE_DIR}/thirdparty/antlr-build/lib/libantlr4-runtime.a)
+target_link_libraries(runTests antlr4lib)
 
 add_test(NAME that-test-I-made COMMAND runUnitTests)
 add_test(that-other-test-I-made runUnitTests)

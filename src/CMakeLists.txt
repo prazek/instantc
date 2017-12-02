@@ -1,15 +1,5 @@
 set(INSTC_LLVM_SOURCE_FILES "")
 
-#add_library(instc_lib ${INSTC_LLVM_SOURCE_FILES})
-
-
-#add_executable(insc_llvm insc_llvm.cpp)
-#add_executable(insc_jvm insc_jvm.cpp)
-
-#target_link_libraries(insc_llvm instc_lib)
-#target_link_libraries(insc_jvm instc_lib)
-
-
 
 set(antlr_files LLVMCodeGen.cpp LLVMCodeGen.h
         InstantLexer.cpp InstantLexer.h InstantLexer.tokens InstantParser.cpp
@@ -22,15 +12,18 @@ set(antlr_files LLVMCodeGen.cpp LLVMCodeGen.h
 set(SOURCE_FILES ${SOURCE_FILES} ${INSTC_LLVM_SOURCE_FILES} ${antlr_files})
 
 add_library(instant_lib ${antlr_files})
-
+target_link_libraries(instant_lib antlr4lib)
+add_dependencies(instant_lib antlr4lib)
 
 
 add_executable(insc_llvm llvm.cpp)
+#add_dependencies(insc_llvm antlr4lib)
 target_link_libraries(insc_llvm instant_lib)
-target_link_libraries(insc_llvm ${PROJECT_SOURCE_DIR}/thirdparty/antlr-build/lib/libantlr4-runtime.a)
+target_link_libraries(insc_llvm antlr4lib)
 
 
 add_executable(insc_jvm jvm.cpp)
+#add_dependencies(insc_jvm antlr4lib)
 target_link_libraries(insc_jvm instant_lib)
-#target_link_libraries(llvm ${PROJECT_SOURCE_DIR}/lib/libantlr4-runtime.a)
-target_link_libraries(insc_jvm ${PROJECT_SOURCE_DIR}/thirdparty/antlr-build/lib/libantlr4-runtime.a)
+target_link_libraries(insc_jvm antlr4lib)
+
